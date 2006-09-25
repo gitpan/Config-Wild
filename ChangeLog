@@ -1,0 +1,104 @@
+2006-09-21  Diab Jerius  <djerius@cfa.harvard.edu>
+
+	Tag: 1.3
+
+2006-09-21 11:42 -0400  dj  <dj@macabre.cfa.harvard.edu>  (1e7e1a07dbb4 [tip])
+
+	* Changes, GNUmakefile.local, MANIFEST, MANIFEST.SKIP, README,
+	lib/Config/Wild.pm:
+	minor code cleanup, indenting, doc foxes
+
+2004-08-13 02:37  tag V1_2
+
+2004-08-13 02:37  dj
+
+	* MANIFEST: new manifest
+
+2004-08-13 02:37  dj
+
+	* MANIFEST, cfgs/blanks.cnf, t/values.t: tests for blank resistant
+	  fixes
+
+2004-08-13 02:35  dj
+
+	* lib/Config/Wild.pm: made blank resistant
+
+2004-08-11 23:58  dj
+
+	* Changes, GNUmakefile.local, MANIFEST, Makefile.PL, README,
+	  cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
+	  cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf,
+	  lib/Config/Wild.pm, t/Config-Wild.t, t/include.t, t/vars.t,
+	  t/wildcard.t: Initial revision
+
+2004-08-11 23:58  dj
+
+	* rename from App::ConfigWild to Config::Wild.
+	
+	* Changes, GNUmakefile.local, MANIFEST, Makefile.PL, README,
+	  cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
+	  cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf,
+	  lib/Config/Wild.pm, t/Config-Wild.t, t/include.t, t/vars.t,
+	  t/wildcard.t: [no log message]
+
+
+2004-05-14 14:48  tibbetts
+
+	* Makefile.PL: changed Makefile.PL to quiet warnings when perl
+	  Makefile.PL is run
+
+2002-09-30 14:31  dj
+
+	* GNUmakefile: [no log message]
+
+1999-06-21 16:53  dj
+
+	* ChangeLog, configfile, test.pl: [no log message]
+
+1998-05-19 11:06  dj
+
+	* ConfigWild.pm: [no log message]
+
+Tue May 19 10:46:46 1998  Diab Jerius  <dj@pelf.harvard.edu>
+
+	* ConfigWild.pm (_errmsg): added new central error messaging
+	internal method to support new PrintError attribute.
+	(set_attr): new PrintError attribute.
+	(load_cmd): now takes attributes, first one is 'Exists'. Changed
+	interface from @array to \@array
+
+	
+1998-05-18 14:48  dj
+
+	* MANIFEST: [no log message]
+
+1998-05-18 14:24  dj
+
+	* ConfigWild.pm: [no log message]
+
+Mon May 18 14:22:57 1998  Diab Jerius  <dj@pelf.harvard.edu>
+
+	* ConfigWild.pm: changed 'match' to 'exists'.
+
+Wed May  6 10:14:13 1998  Diab Jerius  <dj@pelf.harvard.edu>
+
+	* ConfigWild.pm: added set_attr, delete, and match functions
+
+1998-05-01 17:17  dj
+
+	* ConfigWild.pm: [no log message]
+
+1998-05-01 17:13  dj
+
+	* ConfigWild.pm: [no log message]
+
+1998-05-01 16:50  tag initial
+
+1998-05-01 16:50  dj
+
+	* ConfigWild.pm, Makefile.PL: Initial revision
+
+1998-05-01 16:50  dj
+
+	* ConfigWild.pm, Makefile.PL: [no log message]
+

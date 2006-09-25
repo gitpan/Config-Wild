@@ -1,0 +1,20 @@
+cfgs/blanks.cnf
+cfgs/include0.cnf
+cfgs/include1.cnf
+cfgs/include2.cnf
+cfgs/test.cnf
+cfgs/vars.cnf
+cfgs/wildcard.cnf
+ChangeLog
+Changes
+COPYING
+lib/Config/Wild.pm
+Makefile.PL
+MANIFEST
+README
+t/Config-Wild.t
+t/include.t
+t/values.t
+t/vars.t
+t/wildcard.t
+META.yml                                 Module meta-data (added by MakeMaker)

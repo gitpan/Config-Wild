@@ -1,104 +1,118 @@
-2006-09-21  Diab Jerius  <djerius@cfa.harvard.edu>
+2011-08-23 12:07 -0400  djerius  <djerius@cfa.harvard.edu>  (158ab05c0df9 [tip])
 
-	Tag: 1.3
+	* cfgs/include0-rel.cnf, cfgs/include1-rel.cnf: new file.
+	* cfgs/include0-rel.cnf, cfgs/include1-rel.cnf:
+	add forgotten configs for tests of relative include
 
-2006-09-21 11:42 -0400  dj  <dj@macabre.cfa.harvard.edu>  (1e7e1a07dbb4 [tip])
+2011-08-23 12:03 -0400  djerius  <djerius@cfa.harvard.edu>  (7add85db00b2)
 
+	* lib/Config/Wild.pm, t/include.t:
+	new attribute, 'dir'. attributes may now be specified via the
+	constructor
+
+2011-08-23 11:37 -0400  djerius  <djerius@cfa.harvard.edu>  (84fbb43cff9f)
+
+	* README, lib/Config/Wild.pm:
+	fix up copyright mesage
+
+2011-08-23 11:33 -0400  djerius  <djerius@cfa.harvard.edu>  (e49f1bc51b05)
+
+	* Makefile.PL:
+	use Module::Install for build
+
+2011-08-23 11:33 -0400  djerius  <djerius@cfa.harvard.edu>  (50b67125b6bf)
+
+	* README, lib/Config/Wild.pm:
+	update license
+
+2011-08-23 11:33 -0400  djerius  <djerius@cfa.harvard.edu>  (390dc5274703)
+
+	* MANIFEST: deleted file.
+	* MANIFEST:
+	remove manifest; it is automatically generated
+
+2006-09-25 11:47 -0400  dj  <dj@macabre.cfa.harvard.edu>  (162bc35777df)
+
+	* .hgtags:
+	Added tag 1.3 for changeset 1e662e8fbe756ce5a09fff97fb6403a40dfe4531
+
+2006-09-25 11:44 -0400  dj  <dj@macabre.cfa.harvard.edu>  (1e662e8fbe75 [1.3])
+
+	* COPYING: new file.
+	* COPYING:
+	added boilerplate copyright
+
+2006-09-25 11:44 -0400  dj  <dj@macabre.cfa.harvard.edu>  (683fadb31f6d)
+
+	* lib/Config/Wild.pm:
+	cleaned up attributions to App::Config
+
+2006-09-21 14:03 -0400  dj  <dj@macabre.cfa.harvard.edu>  (c35b85aa7322)
+
+	* MANIFEST:
+	update for release
+
+2006-09-21 11:44 -0400  dj  <dj@macabre.cfa.harvard.edu>  (bb4539e774ff)
+
+	* ChangeLog:
+	update for release
+
+2006-09-21 11:42 -0400  dj  <dj@macabre.cfa.harvard.edu>  (1e7e1a07dbb4)
+
+	* MANIFEST.SKIP: new file.
+	* GNUmakefile.local: deleted file.
 	* Changes, GNUmakefile.local, MANIFEST, MANIFEST.SKIP, README,
 	lib/Config/Wild.pm:
 	minor code cleanup, indenting, doc foxes
 
-2004-08-13 02:37  tag V1_2
+2006-09-21 11:01 -0400  dj  <dj@macabre.cfa.harvard.edu>  (1e69b4b4eeb2)
 
-2004-08-13 02:37  dj
+	* ChangeLog:
+	merge changes from App::ConfigWild
 
-	* MANIFEST: new manifest
+2006-09-21 14:40 +0000  dj  <dj>  (b4e7509db932)
 
-2004-08-13 02:37  dj
+	* ChangeLog: new file.
+	* ChangeLog:
+	added ChangeLog
 
-	* MANIFEST, cfgs/blanks.cnf, t/values.t: tests for blank resistant
-	  fixes
+2006-09-21 10:41 -0400  dj  <dj@macabre.cfa.harvard.edu>  (f760e0ff0b94)
 
-2004-08-13 02:35  dj
+	* .hgtags: new file.
+	* .hgtags:
+	Added tag V1_2 for changeset
+	21e46ea8e36566903869ca304c7f38dff0b772dd
 
-	* lib/Config/Wild.pm: made blank resistant
+2004-08-13 06:37 +0000  dj  <dj>  (21e46ea8e365 [V1_2])
 
-2004-08-11 23:58  dj
+	* MANIFEST:
+	new manifest
 
-	* Changes, GNUmakefile.local, MANIFEST, Makefile.PL, README,
-	  cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
-	  cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf,
-	  lib/Config/Wild.pm, t/Config-Wild.t, t/include.t, t/vars.t,
-	  t/wildcard.t: Initial revision
+2004-08-13 06:37 +0000  dj  <dj>  (d7d5b2fa258f)
 
-2004-08-11 23:58  dj
+	* cfgs/blanks.cnf, t/values.t: new file.
+	* MANIFEST, cfgs/blanks.cnf, t/values.t:
+	tests for blank resistant fixes
 
-	* rename from App::ConfigWild to Config::Wild.
-	
-	* Changes, GNUmakefile.local, MANIFEST, Makefile.PL, README,
-	  cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
-	  cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf,
-	  lib/Config/Wild.pm, t/Config-Wild.t, t/include.t, t/vars.t,
-	  t/wildcard.t: [no log message]
+2004-08-13 06:35 +0000  dj  <dj>  (a5ba8839a313)
 
+	* lib/Config/Wild.pm:
+	made blank resistant
 
-2004-05-14 14:48  tibbetts
+2004-08-12 03:59 +0000  dj  <dj>  (48bb60a8e0ca)
 
-	* Makefile.PL: changed Makefile.PL to quiet warnings when perl
-	  Makefile.PL is run
+	* MANIFEST:
+	Empty changelog
 
-2002-09-30 14:31  dj
+2004-08-12 03:58 +0000  dj  <dj>  (8762ee3e66b2)
 
-	* GNUmakefile: [no log message]
-
-1999-06-21 16:53  dj
-
-	* ChangeLog, configfile, test.pl: [no log message]
-
-1998-05-19 11:06  dj
-
-	* ConfigWild.pm: [no log message]
-
-Tue May 19 10:46:46 1998  Diab Jerius  <dj@pelf.harvard.edu>
-
-	* ConfigWild.pm (_errmsg): added new central error messaging
-	internal method to support new PrintError attribute.
-	(set_attr): new PrintError attribute.
-	(load_cmd): now takes attributes, first one is 'Exists'. Changed
-	interface from @array to \@array
-
-	
-1998-05-18 14:48  dj
-
-	* MANIFEST: [no log message]
-
-1998-05-18 14:24  dj
-
-	* ConfigWild.pm: [no log message]
-
-Mon May 18 14:22:57 1998  Diab Jerius  <dj@pelf.harvard.edu>
-
-	* ConfigWild.pm: changed 'match' to 'exists'.
-
-Wed May  6 10:14:13 1998  Diab Jerius  <dj@pelf.harvard.edu>
-
-	* ConfigWild.pm: added set_attr, delete, and match functions
-
-1998-05-01 17:17  dj
-
-	* ConfigWild.pm: [no log message]
-
-1998-05-01 17:13  dj
-
-	* ConfigWild.pm: [no log message]
-
-1998-05-01 16:50  tag initial
-
-1998-05-01 16:50  dj
-
-	* ConfigWild.pm, Makefile.PL: Initial revision
-
-1998-05-01 16:50  dj
-
-	* ConfigWild.pm, Makefile.PL: [no log message]
+	* .hgignore, Changes, GNUmakefile.local, MANIFEST, Makefile.PL,
+	README, cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
+	cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf, lib/Config/Wild.pm,
+	t/Config-Wild.t, t/include.t, t/vars.t, t/wildcard.t: new file.
+	* .hgignore, Changes, GNUmakefile.local, MANIFEST, Makefile.PL,
+	README, cfgs/include0.cnf, cfgs/include1.cnf, cfgs/include2.cnf,
+	cfgs/test.cnf, cfgs/vars.cnf, cfgs/wildcard.cnf, lib/Config/Wild.pm,
+	t/Config-Wild.t, t/include.t, t/vars.t, t/wildcard.t:
+	Initial revision
 

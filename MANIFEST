@@ -1,5 +1,7 @@
 cfgs/blanks.cnf
+cfgs/include0-rel.cnf
 cfgs/include0.cnf
+cfgs/include1-rel.cnf
 cfgs/include1.cnf
 cfgs/include2.cnf
 cfgs/test.cnf
@@ -8,13 +10,21 @@ cfgs/wildcard.cnf
 ChangeLog
 Changes
 COPYING
+inc/Module/Install.pm
+inc/Module/Install/Base.pm
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
+inc/Module/Install/Makefile.pm
+inc/Module/Install/Metadata.pm
+inc/Module/Install/Win32.pm
+inc/Module/Install/WriteAll.pm
 lib/Config/Wild.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
+META.yml
 README
 t/Config-Wild.t
 t/include.t
 t/values.t
 t/vars.t
 t/wildcard.t
-META.yml                                 Module meta-data (added by MakeMaker)

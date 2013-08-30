@@ -28,258 +28,241 @@ use Carp qw( carp croak );
 use FileHandle;
 use Cwd qw[ getcwd ];
 
-our $VERSION = '1.4';
+our $VERSION = '1.5';
 
 
-sub new
-{
+sub new {
     my $this = shift;
-    my $class = ref($this) || $this;
+    my $class = ref( $this ) || $this;
 
     my $attr = ref $_[-1] eq 'HASH' ? pop @_ : {};
 
     my $self = {
-		'wild' => [],	# regular expression keywords
-		'abs' => {},	# absolute keywords
-		'attr' => {
-			   UNDEF => undef, # function to call from value when
-					   # keyword not defined
-			   PrintError => 0, # warn() on error
-			   dir => '.',
-			   %$attr,
-			  },
+        wild => [],    # regular expression keywords
+        abs  => {},    # absolute keywords
+        attr => {
+            UNDEF      => undef,    # function to call from value when
+                                    # keyword not defined
+            PrintError => 0,        # warn() on error
+            dir        => '.',
+            %$attr,
+        },
 
-	       };
+    };
 
     bless $self, $class;
 
     my $file = shift;
 
-    if ( $file )
-    {
-	$self->load($file) or return undef;
+    if ( $file ) {
+        $self->load( $file ) or return undef;
     }
 
     $self;
 }
 
-sub load
-{
+sub load {
     my ( $self, $file ) = @_;
     my ( $keyword, $value );
 
-    unless ( $file )
-    {
-	$self->_errmsg('load: no file specified');
-	return undef;
+    unless ( $file ) {
+        $self->_errmsg( 'load: no file specified' );
+        return undef;
     }
 
     my %files = ();
-    my @files = ( { 'file' => $file, 'pos' => 0 } );
+    my @files = ( { file => $file, pos => 0 } );
 
     my $cwd = getcwd;
-    chdir( $self->{attr}{dir} ) or do
-    {
-	$self->_errmsg( "load: couldn't change directory to $self->{attr}{dir}");
-	return undef;
+    chdir( $self->{attr}{dir} ) or do {
+        $self->_errmsg(
+            "load: couldn't change directory to $self->{attr}{dir}" );
+        return undef;
     };
 
     my $ret = eval {
 
       loop:
-	while ( @files )
-	{
-	    my $file = $files[0]->{'file'};
-	    my $pos  = $files[0]->{'pos'};
+        while ( @files ) {
+            my $file = $files[0]->{file};
+            my $pos  = $files[0]->{pos};
 
-	    # if EOF on last file, don't bother with it
-	    next if $files[0]->{'pos'} == -1;
+            # if EOF on last file, don't bother with it
+            next if $files[0]->{pos} == -1;
 
-	    my $fh = new FileHandle $file or do
-	    {
-		$self->_errmsg("load: error opening file `$file'");
-		return;
-	    };
+            my $fh = new FileHandle $file or do {
+                $self->_errmsg( "load: error opening file `$file'" );
+                return;
+            };
 
-	    seek( $fh, $files[0]->{'pos'}, 0 ); 
+            seek( $fh, $files[0]->{pos}, 0 );
 
-	    # loop through file
-	    my $line = 0;
-	    while ( <$fh> )
-	    {
-		$files[0]->{'pos'} = tell;
-		$line++;
+            # loop through file
+            my $line = 0;
+            while ( <$fh> ) {
+                $files[0]->{pos} = tell;
+                $line++;
 
-		# ignore comment lines or empty lines
-		next if /^\s*\#|^\s*$/;
+                # ignore comment lines or empty lines
+                next if /^\s*\#|^\s*$/;
 
-		chomp;
+                chomp;
 
-		if ( /^\s*%include\s+(.*)/ )
-		{
-		    if ( CORE::exists $files{ $1 } )
-		    {
-			$self->_errmsg("load: infinite loop trying to read $1");
-			return undef;
-		    }
-		    $files{ $1 }++;
-		    unshift @files, { 'file' => $1, 'pos' => 0 };
-		    $fh->close;
-		    redo loop;
-		}
+                if ( /^\s*%include\s+(.*)/ ) {
+                    if ( CORE::exists $files{$1} ) {
+                        $self->_errmsg(
+                            "load: infinite loop trying to read $1" );
+                        return undef;
+                    }
+                    $files{$1}++;
+                    unshift @files, { file => $1, pos => 0 };
+                    $fh->close;
+                    redo loop;
+                }
 
-		$self->_parsepair( $_ ) or do 
-		{
-		    $self->_errmsg("load: $file: can't parse line $line");
-		    return;
-		}
+                $self->_parsepair( $_ ) or do {
+                    $self->_errmsg( "load: $file: can't parse line $line" );
+                    return;
+                  }
 
-	    }
+            }
 
-	}
-	continue
-	{
-	    shift @files;
-	}
+        }
+        continue {
+            shift @files;
+        }
 
 
-	return 1;
+        return 1;
     };
 
-    chdir( $cwd ) or do
-    {
-	$self->_errmsg( "load: error restoring directory to $cwd");
-	return undef;
+    chdir( $cwd ) or do {
+        $self->_errmsg( "load: error restoring directory to $cwd" );
+        return undef;
     };
 
 
     return $ret;
 }
 
-sub load_cmd
-{
+sub load_cmd {
     my ( $self, $argv, $attr ) = @_;
     my $keyword;
 
     $attr = {} unless defined $attr;
 
-    foreach ( @$argv )
-    {
-	if ( $$attr{ Exists } && 
-	     ($keyword = ($self->_splitpair( $_ ))[0]) &&
-	     ! $self->_exists( $keyword ) )
-	{
-	    $self->_errmsg("load_cmd: keyword `$keyword' doesn't exist");
-	    return undef;
-	}
+    foreach ( @$argv ) {
+        if (   $$attr{Exists}
+            && ( $keyword = ( $self->_splitpair( $_ ) )[0] )
+            && !$self->_exists( $keyword ) )
+        {
+            $self->_errmsg( "load_cmd: keyword `$keyword' doesn't exist" );
+            return undef;
+        }
 
-	$self->_parsepair( $_ ) or do
-	{
-	    $self->_errmsg("load_cmd: can't parse line $_");
-	    return undef;
-	}
+        $self->_parsepair( $_ ) or do {
+            $self->_errmsg( "load_cmd: can't parse line $_" );
+            return undef;
+          }
     }
 
     1;
 }
 
 
-sub set
-{
+sub set {
     my ( $self, $keyword, $value ) = @_;
 
-    die unless defined( $keyword) and defined ( $value );
+    die unless defined( $keyword ) and defined( $value );
     # so, is it a regular expression or not?
-    if ( $keyword =~ /\{/ )
-    {
-	# quote all characters outside of curly brackets.
-	$keyword = join('', 
-			map { substr($_,0,1) ne '{'  
-				? quotemeta($_) : substr($_, 1, -1 ) }
-			$keyword =~ /( [^{}]+ | {[^\}]*} )/gx);
+    if ( $keyword =~ /\{/ ) {
+        # quote all characters outside of curly brackets.
+        $keyword = join(
+            '',
+            map {
+                substr( $_, 0, 1 ) ne '{'
+                  ? quotemeta( $_ )
+                  : substr( $_, 1, -1 )
+            } $keyword =~ /( [^{}]+ | {[^\}]*} )/gx
+        );
 
-	unshift @{$self->{wild}}, [ $keyword, $value ];
+        unshift @{ $self->{wild} }, [ $keyword, $value ];
     }
-    else
-    {
-	$self->{'abs'}->{$keyword} = $value;
+    else {
+        $self->{abs}->{$keyword} = $value;
     }
 }
 
 # for backwards compatibility
-sub value
-{
+sub value {
     goto &get;
 }
 
-sub get
-{
-    my ($self, $keyword) = @_;
+sub get {
+    my ( $self, $keyword ) = @_;
 
-    unless ( $keyword )
-    {
-	$self->_errmsg('value: no keyword specified');
-	return undef;
+    unless ( $keyword ) {
+        $self->_errmsg( 'value: no keyword specified' );
+        return undef;
     }
 
-    return $self->_expand($self->{'abs'}->{$keyword})
-      if CORE::exists($self->{'abs'}->{$keyword});
+    return $self->_expand( $self->{abs}->{$keyword} )
+      if CORE::exists( $self->{abs}->{$keyword} );
 
-    foreach ( @{$self->{wild}} )
-    {
-	return $self->_expand($_->[1]) if $keyword =~ /$_->[0]/;
+    foreach ( @{ $self->{wild} } ) {
+        return $self->_expand( $_->[1] ) if $keyword =~ /$_->[0]/;
     }
 
-    return &{$self->{attr}{UNDEF}}( $keyword )
-      if defined ( $self->{attr}{UNDEF} );
+    return $self->{attr}{UNDEF}->( $keyword )
+      if defined $self->{attr}{UNDEF};
 
     undef;
 }
 
+sub getbool {
 
-sub delete
-{
+    require Lingua::Boolean::Tiny;
+
+    my $self = shift;
+
+    return Lingua::Boolean::Tiny::boolean( $self->get( @_ ) );
+}
+
+sub delete {
     my ( $self, $keyword ) = @_;
 
-    unless ($keyword)
-    {
-	$self->_errmsg('delete: no keyword specified');
-	return undef;
+    unless ( $keyword ) {
+        $self->_errmsg( 'delete: no keyword specified' );
+        return undef;
     }
 
-    if ( CORE::exists $self->{'abs'}->{$keyword} )
-    {
-	delete $self->{'abs'}->{$keyword};
+    if ( CORE::exists $self->{abs}->{$keyword} ) {
+        delete $self->{abs}->{$keyword};
     }
-    else
-    {
-	$self->{'wild'} = grep( $_->[0] ne $keyword, @{$self->{'wild'}} );
+    else {
+        $self->{wild} = grep( $_->[0] ne $keyword, @{ $self->{wild} } );
     }
     1;
 }
 
-sub exists
-{
+sub exists {
     my ( $self, $keyword ) = @_;
 
-    unless ($keyword)
-    {
-	$self->_errmsg('exists: no keyword specified');
-	return undef;
+    unless ( $keyword ) {
+        $self->_errmsg( 'exists: no keyword specified' );
+        return undef;
     }
 
     return $self->_exists( $keyword );
 }
 
-sub _exists
-{
+sub _exists {
     my ( $self, $keyword ) = @_;
 
-    return 1 if CORE::exists($self->{'abs'}->{$keyword});
+    return 1 if CORE::exists( $self->{abs}->{$keyword} );
 
-    foreach ( @{$self->{wild}} )
-    {
-	return 1 if $keyword =~ /$_->[0]/;
+    foreach ( @{ $self->{wild} } ) {
+        return 1 if $keyword =~ /$_->[0]/;
     }
 
     undef;
@@ -287,46 +270,38 @@ sub _exists
 }
 
 
-sub set_attr
-{
+sub set_attr {
     my ( $self, $attr ) = @_;
     my ( $key, $value );
 
-    while ( ( $key, $value ) = each %{$attr} )
-    {
-	unless ( CORE::exists $self->{'attr'}{$key} )
-	{
-	    $self->_errmsg("set_attr: unknown attribute: `$key'");
-	    return undef;
-	}
-	$self->{'attr'}{$key} = $value;
+    while ( ( $key, $value ) = each %{$attr} ) {
+        unless ( CORE::exists $self->{attr}{$key} ) {
+            $self->_errmsg( "set_attr: unknown attribute: `$key'" );
+            return undef;
+        }
+        $self->{attr}{$key} = $value;
     }
 
 }
 
 
 
-sub errmsg
-{
+sub errmsg {
     my $self = shift;
     return $self->{errmsg};
 }
 
-sub _errmsg
-{
+sub _errmsg {
     my ( $self, $errmsg ) = @_;
 
-    $self->{'errmsg'} = __PACKAGE__ . ': ' . $errmsg;
-    if ( $self->{attr}{PrintError} )
-    {
-	if ( ref($self->{attr}{PrintError}) eq 'CODE' )
-	{
-	    &{$self->{attr}{PrintError}}($errmsg);
-	}
-	else
-	{
-	    warn $errmsg, "\n"
-	}
+    $self->{errmsg} = __PACKAGE__ . ': ' . $errmsg;
+    if ( $self->{attr}{PrintError} ) {
+        if ( ref( $self->{attr}{PrintError} ) eq 'CODE' ) {
+            $self->{attr}{PrintError}->( $errmsg );
+        }
+        else {
+            warn $errmsg, "\n";
+        }
     }
 }
 
@@ -335,7 +310,7 @@ sub _errmsg
 #
 # AUTOLOAD
 #
-# Autoload function called whenever an unresolved object method is 
+# Autoload function called whenever an unresolved object method is
 # called.  If the method name relates to a defined VARIABLE, we patch
 # in $self->get() and $self->set() to magically update the varaiable
 # (if a parameter is supplied) and return the previous value.
@@ -351,96 +326,88 @@ sub _errmsg
 #========================================================================
 
 our $AUTOLOAD;
-sub AUTOLOAD 
-{
+sub AUTOLOAD {
     my $self = shift;
     my $keyword;
-    my ($oldval, $newval);
+    my ( $oldval, $newval );
 
 
     # splat the leading package name
-    ($keyword = $AUTOLOAD) =~ s/.*:://;
+    ( $keyword = $AUTOLOAD ) =~ s/.*:://;
 
     # ignore destructor
     $keyword eq 'DESTROY' && return;
 
-    if ( CORE::exists($self->{'abs'}->{$keyword}) )
-    {
-	$oldval = $self->_expand($self->{'abs'}->{$keyword});
+    if ( CORE::exists( $self->{abs}->{$keyword} ) ) {
+        $oldval = $self->_expand( $self->{abs}->{$keyword} );
     }
-    else
-    {
-	my $found = 0;
-	foreach ( @{$self->{wild}} )
-	{
-	    $oldval = $self->_expand($_->[1]), $found++, last
-	      if $keyword =~ /$_->[0]/;
-	}
-	if ( ! $found )
-	{
-	    return &{$self->{attr}{UNDEF}}( $keyword )
-	      if defined ( $self->{attr}{UNDEF} );
+    else {
+        my $found = 0;
+        foreach ( @{ $self->{wild} } ) {
+            $oldval = $self->_expand( $_->[1] ), $found++, last
+              if $keyword =~ /$_->[0]/;
+        }
+        if ( !$found ) {
+            return $self->{attr}{UNDEF}->( $keyword )
+              if defined( $self->{attr}{UNDEF} );
 
-	    $self->{'errmsg'} = __PACKAGE__ . ": $keyword doesn't exist";
-	    return undef;
-	}
+            $self->{errmsg} = __PACKAGE__ . ": $keyword doesn't exist";
+            return undef;
+        }
     }
 
     # set a new value if a parameter was supplied
-    $self->set($keyword, $newval)
-      if defined($newval = shift);
+    $self->set( $keyword, $newval )
+      if defined( $newval = shift );
 
     # return old value
     return $oldval;
 }
 
-sub _expand
-{
+sub _expand {
     my ( $self, $value ) = @_;
 
     my $stop = 0;
-    until ( $stop )
-    {
-	$stop = 1;
+    until ( $stop ) {
+        $stop = 1;
 
-	# expand ${VAR} as environment variables
-	$value =~ s/\$\{(\w+)\}/defined $ENV{$1} ? $ENV{$1} : ''/ge
-	  and $stop = 0;
+        # expand ${VAR} as environment variables
+        $value =~ s/\$\{(\w+)\}/defined $ENV{$1} ? $ENV{$1} : ''/ge
+          and $stop = 0;
 
-	# expand $(VAR) as a ConfigWild variable
-	$value =~ s{\$\((\w+)\)} {
-	    defined $self->{'abs'}->{$1} ? $self->{'abs'}->{$1} : '';
+        # expand $(VAR) as a ConfigWild variable
+        $value =~ s{\$\((\w+)\)} {
+	    defined $self->{abs}->{$1} ? $self->{abs}->{$1} : '';
 	}gex
-	  and $stop = 0;
+          and $stop = 0;
 
-	# expand any unparenthesised/braced variables,
-	# e.g. "$var", as ConfigWild vars or environment variables.
-	# leave untouched if not
-	$value =~ s{\$(\w+)} {
-	    defined $self->{'abs'}->{$1} ? $self->{'abs'}->{$1} :
+        # expand any unparenthesised/braced variables,
+        # e.g. "$var", as ConfigWild vars or environment variables.
+        # leave untouched if not
+        $value =~ s{\$(\w+)} {
+	    defined $self->{abs}->{$1} ? $self->{abs}->{$1} :
 	      defined $ENV{$1} ? $ENV{$1} :
 		"\$$1"
 	    }gex
-	      and $stop = 0;
+          and $stop = 0;
     }
     # return the value
     $value;
 }
 
-sub _splitpair
-{
+sub _splitpair {
     my ( $self, $pair ) = @_;
     my ( $keyword, $value );
 
     $pair =~ s/^\s+//;
     $pair =~ s/\s+$//;
 
-    return 2 != (($keyword, $value ) = $pair =~ /([^=\s]*)\s*=\s*(.*)/) ?
-      () : ( $keyword, $value );
+    return 2 != ( ( $keyword, $value ) = $pair =~ /([^=\s]*)\s*=\s*(.*)/ )
+      ? ()
+      : ( $keyword, $value );
 }
 
-sub _parsepair
-{
+sub _parsepair {
     my ( $self, $pair ) = @_;
 
     my ( $keyword, $value );
@@ -449,7 +416,7 @@ sub _parsepair
     $pair =~ s/\s+$//;
 
     return undef
-      if 2 != (($keyword, $value ) = $pair =~ /([^=\s]*)\s*=\s*(.*)/);
+      if 2 != ( ( $keyword, $value ) = $pair =~ /([^=\s]*)\s*=\s*(.*)/ );
 
     $self->set( $keyword, $value );
     1;
@@ -676,6 +643,15 @@ Return the value associated with a given keyword.  B<$keyword> is
 first matched against the absolute keywords, then agains the
 wildcards.  If no match is made, C<undef> is returned.
 
+=item B<getbool>
+
+  $value = $cfg->getbool( $keyword );
+
+Convert the value associated with a given keyword to a true or false
+value using B<L<Lingua::Boolean::Tiny>>.  B<$keyword> is first matched against the absolute keywords,
+then agains the wildcards.  If no match is made, or the value could
+not be converted to a truth value, C<undef> is returned.
+
 
 =item B<delete>
 
@@ -748,4 +724,3 @@ module.
 =head1 AUTHOR
 
 Diab Jerius, E<lt>djerius@cpan.orgE<gt>
-

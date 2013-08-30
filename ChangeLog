@@ -1,4 +1,53 @@
-2011-08-23 12:07 -0400  djerius  <djerius@cfa.harvard.edu>  (158ab05c0df9 [tip])
+2013-08-30 16:04 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (499e21c10d58 [tip])
+
+	* Changes, lib/Config/Wild.pm:
+	update logs and version for release
+
+2013-08-30 16:04 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (cc299d38a90b)
+
+	* cfgs/boolean.cnf: new file.
+	* Makefile.PL, cfgs/boolean.cnf, lib/Config/Wild.pm, t/Config-Wild.t:
+	new method, getbool() converts values to boolean
+
+2013-08-30 15:54 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (7d0226d8d252)
+
+	* t/include.t, t/values.t, t/vars.t, t/wildcard.t: deleted file.
+	* t/Config-Wild.t, t/include.t, t/values.t, t/vars.t, t/wildcard.t:
+	consolidate and modernize tests. too many files for one little
+	module
+
+2013-08-30 15:31 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (9c40d50cb9a3)
+
+	* t/Config-Wild.t, t/values.t, t/vars.t, t/wildcard.t:
+	remove boilerplate text, use done_testing()
+
+2013-08-30 15:15 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (dc578f79dbc4)
+
+	* Changes:
+	make more CPAN::Changes::Spec compatible
+
+2013-08-30 15:13 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (161585d5d5db)
+
+	* lib/Config/Wild.pm:
+	modernize some of the syntax, reformat
+
+2013-08-30 15:02 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (91cdc0dfaea3)
+
+	* ChangeLog: deleted file.
+	* ChangeLog:
+	ChangeLog is a derived product; don't track
+
+2011-08-23 12:08 -0400  djerius  <djerius@cfa.harvard.edu>  (018b2b01afcd)
+
+	* .hgtags:
+	Added tag 1.4.0 for changeset d87cf64dc6f2
+
+2011-08-23 12:08 -0400  djerius  <djerius@cfa.harvard.edu>  (d87cf64dc6f2 [1.4.0])
+
+	* ChangeLog, Changes:
+	update logs for release
+
+2011-08-23 12:07 -0400  djerius  <djerius@cfa.harvard.edu>  (158ab05c0df9)
 
 	* cfgs/include0-rel.cnf, cfgs/include1-rel.cnf: new file.
 	* cfgs/include0-rel.cnf, cfgs/include1-rel.cnf:
